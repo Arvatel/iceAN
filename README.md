@@ -29,9 +29,6 @@
 21. Командная строка Linux
 22. Virtual Box
 
-Доступ к ресурсу:
-https://vimpel38.ru/
-
 Для работы в веб-интерфейсе продукта рекомендуется использовать браузеры:
 - Chrome: (Current - 1) and Current
 - Edge: (Current - 1) and Current
