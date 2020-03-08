@@ -126,14 +126,13 @@ async def get_coordinates(request):
         return web.Response(text="Error: wrong coordinates data")
 
     response = {}
-    i = 0
-    for doc in data.values():
+    
+    for i, doc in enumerate(data.values()):
         response[i] = {
             "city": doc["city"],
             "business_type": doc["business_type"],
             "cords": coordinates(doc),
         }
-        i = i + 1
 
     return web.json_response(response)
 
