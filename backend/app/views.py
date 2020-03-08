@@ -7,8 +7,10 @@ from create_files import create_file
 
 
 def graph(data):
-    city = data["city"]  # *тут город* (MSK, NY, GB)
-    business_type = data["business_type"]  # *что надо*
+    """connecting with MongoDB and getting data for graphics"""
+
+    city = data["city"]
+    business_type = data["business_type"]
 
     dt_today = datetime.datetime.today()
 
@@ -23,7 +25,7 @@ def graph(data):
     host = "95.183.13.86:27017"
     db_name = "City" + city
 
-    uri = f"mongodb://{user}:{password}@{host}"
+    # uri = f"mongodb://{user}:{password}@{host}"
     # db = MongoClient(uri)[db_name]
 
     db = MongoClient("95.183.13.86:27017")[db_name]
@@ -66,12 +68,12 @@ def graph(data):
 
 
 async def get_data(request):
+    """send data for graphics: for each day - count of business"""
     try:
-        data = await request.json()
+        data = await request.json()     # request (city, business type, dt_start, dt_stop)
     except:
         return web.Response(text="Error: wrong graph data")
 
-    print(data)
     response = {}
 
     i = 0
@@ -83,20 +85,21 @@ async def get_data(request):
         }
         i = i + 1
 
-    # print(response)
-    return web.json_response(response)  # перевести формат в строку
+    return web.json_response(response) 
 
 
 def coordinates(data):
-    city = data["city"]  # *тут город* (MSK, NY, GB)
-    business_type = data["business_type"]  # *что надо*
+    """connectind with MongoDB, taking data for senging coordinates for map (locations)"""
+
+    city = data["city"]
+    business_type = data["business_type"]
 
     user = "user"
     password = "user"
     host = "95.183.13.86:27017"
     db_name = "City" + city
 
-    uri = f"mongodb://{user}:{password}@{host}"
+    # uri = f"mongodb://{user}:{password}@{host}"
     # db = MongoClient(uri)[db_name]
 
     db = MongoClient("95.183.13.86:27017")[db_name]
@@ -115,8 +118,10 @@ def coordinates(data):
 
 
 async def get_coordinates(request):
+    """ send data with coordinates for map (locations)"""
+
     try:
-        data = await request.json()
+        data = await request.json()     # request (city, business type)
     except:
         return web.Response(text="Error: wrong coordinates data")
 
@@ -130,22 +135,22 @@ async def get_coordinates(request):
         }
         i = i + 1
 
-    # print(response)
     return web.json_response(response)
 
 
 async def get_districts(request):
+    """ send html page (map with districts)"""
     try:
-        data = await request.json()
+        data = await request.json()     # request (city, business type)
     except:
         return web.Response(text="Error")
 
-    city = data["city"]  # *тут город* (MSK, NY, GB)
-    business_type = data["business_type"]  # *что надо*
+    city = data["city"]
+    business_type = data["business_type"]
 
     directory = "data/{}_{}".format(city, business_type)
-    if not os.path.exists(directory):
-        create_file()
+    if not os.path.exists(directory): 
+        create_file()                   #create html pages
 
     with open(directory, "r") as file:
         data = file.read()
